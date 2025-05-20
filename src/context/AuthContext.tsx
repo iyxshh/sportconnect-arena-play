@@ -1,89 +1,218 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { User } from '@supabase/supabase-js';
+import { supabase, signInWithEmail, signUpWithEmail, signInWithOAuth, signOut } from '@/lib/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import { getUserProfile } from '@/lib/supabase/queries';
 
-// This is a placeholder - in actual implementation you'd connect to Supabase
-// and define proper types based on your database schema
-type User = {
+export type UserProfile = {
   id: string;
-  email: string;
-  name?: string;
   username?: string;
-  profileComplete: boolean; // Used to determine if onboarding is complete
+  full_name?: string;
+  bio?: string;
+  gender?: string;
+  college?: string;
+  avatar_url?: string;
+  dob?: string;
+  phone_verified?: boolean;
+  profileComplete: boolean;
+  user_sports?: Array<{
+    sport: string;
+    skill_level: number;
+  }>;
+  user_locations?: Array<{
+    district: string;
+    coordinates: any;
+  }>;
+  user_rankings?: Array<{
+    sport: string;
+    district: string;
+    elo_rating: number;
+    rank: number;
+    wins: number;
+    losses: number;
+  }>;
 };
 
 type AuthContextType = {
   user: User | null;
+  profile: UserProfile | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
+  signInWithApple: () => Promise<void>;
   signOut: () => Promise<void>;
-  setUser: (user: User | null) => void;
+  refreshProfile: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
-  // Mock authentication functions until Supabase is integrated
-  const signIn = async (email: string, password: string) => {
-    // Placeholder - will connect to Supabase Auth
-    console.log('Signing in with:', email, password);
-    
-    // Mock successful login with 1s delay
-    setLoading(true);
-    return new Promise<void>((resolve) => {
-      setTimeout(() => {
-        setUser({
-          id: '123',
-          email,
+  const loadProfile = async (userId: string) => {
+    try {
+      const profileData = await getUserProfile(userId);
+      
+      if (profileData) {
+        setProfile({
+          ...profileData,
+          profileComplete: Boolean(profileData.username && profileData.full_name)
+        });
+      } else {
+        // New user without profile
+        setProfile({
+          id: userId,
           profileComplete: false
         });
-        setLoading(false);
-        resolve();
-      }, 1000);
-    });
+      }
+    } catch (error) {
+      console.error('Error loading user profile:', error);
+    }
+  };
+  
+  const refreshProfile = async () => {
+    if (user?.id) {
+      await loadProfile(user.id);
+    }
+  };
+
+  const signIn = async (email: string, password: string) => {
+    try {
+      setLoading(true);
+      const { session } = await signInWithEmail(email, password);
+      if (session?.user) {
+        setUser(session.user);
+        await loadProfile(session.user.id);
+      }
+    } catch (error: any) {
+      toast({
+        title: "Sign in failed",
+        description: error.message || "Please check your credentials and try again.",
+        variant: "destructive",
+      });
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const signUp = async (email: string, password: string) => {
-    // Placeholder - will connect to Supabase Auth
-    console.log('Signing up with:', email, password);
-    
-    // Mock successful registration with 1s delay
-    setLoading(true);
-    return new Promise<void>((resolve) => {
-      setTimeout(() => {
-        setUser({
-          id: '123',
-          email,
+    try {
+      setLoading(true);
+      const { session } = await signUpWithEmail(email, password);
+      if (session?.user) {
+        setUser(session.user);
+        setProfile({
+          id: session.user.id,
           profileComplete: false
         });
-        setLoading(false);
-        resolve();
-      }, 1000);
-    });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Sign up failed",
+        description: error.message || "Please try again with a different email.",
+        variant: "destructive",
+      });
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const signOut = async () => {
-    // Placeholder - will connect to Supabase Auth
-    console.log('Signing out');
-    
-    // Mock successful logout
-    setUser(null);
-    return Promise.resolve();
+  const signInWithGoogle = async () => {
+    try {
+      await signInWithOAuth('google');
+    } catch (error: any) {
+      toast({
+        title: "Google sign in failed",
+        description: error.message || "Please try again later.",
+        variant: "destructive",
+      });
+      throw error;
+    }
+  };
+
+  const signInWithApple = async () => {
+    try {
+      await signInWithOAuth('apple');
+    } catch (error: any) {
+      toast({
+        title: "Apple sign in failed",
+        description: error.message || "Please try again later.",
+        variant: "destructive",
+      });
+      throw error;
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      setUser(null);
+      setProfile(null);
+    } catch (error: any) {
+      toast({
+        title: "Sign out failed",
+        description: error.message || "Please try again later.",
+        variant: "destructive",
+      });
+      throw error;
+    }
   };
 
   useEffect(() => {
-    // Check if user is already logged in (from Supabase session)
-    // This would be done by checking Supabase Auth state
-    
-    // For now, we'll just set loading to false
-    setLoading(false);
+    const setInitialUser = async () => {
+      try {
+        const session = await supabase.auth.getSession();
+        if (session?.data?.session?.user) {
+          setUser(session.data.session.user);
+          await loadProfile(session.data.session.user.id);
+        }
+      } catch (error) {
+        console.error('Error getting session:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    setInitialUser();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (session?.user) {
+          setUser(session.user);
+          await loadProfile(session.user.id);
+        } else {
+          setUser(null);
+          setProfile(null);
+        }
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut, setUser }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        profile,
+        loading,
+        signIn,
+        signUp,
+        signInWithGoogle,
+        signInWithApple,
+        signOut: handleSignOut,
+        refreshProfile,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

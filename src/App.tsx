@@ -13,6 +13,11 @@ import Dashboard from "./pages/app/Dashboard";
 import Challenges from "./pages/app/Challenges";
 import Leaderboard from "./pages/app/Leaderboard";
 import Navbar from "./components/layout/Navbar";
+import CreateChallenge from "./pages/app/CreateChallenge";
+import ChallengeDetail from "./pages/app/ChallengeDetail";
+import SubmitResult from "./pages/app/SubmitResult";
+import MatchComplete from "./pages/app/MatchComplete";
+import VerifyPhone from "./pages/app/VerifyPhone";
 
 const queryClient = new QueryClient();
 
@@ -36,10 +41,40 @@ const AppRoutes = () => {
           <Challenges />
         </>
       } />
+      <Route path="/app/challenges/:id/join" element={
+        <>
+          <Navbar />
+          <ChallengeDetail />
+        </>
+      } />
+      <Route path="/app/create-challenge" element={
+        <>
+          <Navbar />
+          <CreateChallenge />
+        </>
+      } />
       <Route path="/app/leaderboard" element={
         <>
           <Navbar />
           <Leaderboard />
+        </>
+      } />
+      <Route path="/app/matches/:id/submit" element={
+        <>
+          <Navbar />
+          <SubmitResult />
+        </>
+      } />
+      <Route path="/app/matches/:id/complete" element={
+        <>
+          <Navbar />
+          <MatchComplete />
+        </>
+      } />
+      <Route path="/app/verify-phone" element={
+        <>
+          <Navbar />
+          <VerifyPhone />
         </>
       } />
       

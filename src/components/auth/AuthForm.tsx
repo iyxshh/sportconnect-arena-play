@@ -8,12 +8,14 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from '@/context/AuthContext';
+import { Apple, Google } from 'lucide-react';
+import { Separator } from "@/components/ui/separator";
 
 const AuthForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, signInWithGoogle, signInWithApple } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -26,13 +28,8 @@ const AuthForm = () => {
         title: "Welcome back!",
         description: "You've successfully signed in.",
       });
-      navigate('/app/onboarding');
+      navigate('/app/dashboard');
     } catch (error) {
-      toast({
-        title: "Sign in failed",
-        description: "Please check your credentials and try again.",
-        variant: "destructive",
-      });
       console.error('Sign in error:', error);
     } finally {
       setIsSubmitting(false);
@@ -50,14 +47,27 @@ const AuthForm = () => {
       });
       navigate('/app/onboarding');
     } catch (error) {
-      toast({
-        title: "Sign up failed",
-        description: "Please try again with a different email.",
-        variant: "destructive",
-      });
       console.error('Sign up error:', error);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle();
+      // No need for toast or navigation - will be redirected by OAuth
+    } catch (error) {
+      console.error('Google sign in error:', error);
+    }
+  };
+
+  const handleAppleSignIn = async () => {
+    try {
+      await signInWithApple();
+      // No need for toast or navigation - will be redirected by OAuth
+    } catch (error) {
+      console.error('Apple sign in error:', error);
     }
   };
 
@@ -78,6 +88,38 @@ const AuthForm = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={handleGoogleSignIn}
+                  className="w-full"
+                >
+                  <Google className="w-4 h-4 mr-2" />
+                  Google
+                </Button>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={handleAppleSignIn}
+                  className="w-full"
+                >
+                  <Apple className="w-4 h-4 mr-2" />
+                  Apple
+                </Button>
+              </div>
+              
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">
+                    Or continue with email
+                  </span>
+                </div>
+              </div>
+              
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input 
@@ -126,6 +168,38 @@ const AuthForm = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={handleGoogleSignIn}
+                  className="w-full"
+                >
+                  <Google className="w-4 h-4 mr-2" />
+                  Google
+                </Button>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={handleAppleSignIn}
+                  className="w-full"
+                >
+                  <Apple className="w-4 h-4 mr-2" />
+                  Apple
+                </Button>
+              </div>
+              
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">
+                    Or continue with email
+                  </span>
+                </div>
+              </div>
+              
               <div className="space-y-2">
                 <Label htmlFor="signup-email">Email</Label>
                 <Input 

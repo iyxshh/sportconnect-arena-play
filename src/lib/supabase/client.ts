@@ -27,3 +27,65 @@ export const getCurrentUser = async () => {
   const { data: { user } } = await supabase.auth.getUser();
   return user;
 };
+
+// Sign in with email and password
+export const signInWithEmail = async (email: string, password: string) => {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+  
+  if (error) throw error;
+  return data;
+};
+
+// Sign up with email and password
+export const signUpWithEmail = async (email: string, password: string) => {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+  });
+  
+  if (error) throw error;
+  return data;
+};
+
+// Sign in with OAuth (Google, Apple)
+export const signInWithOAuth = async (provider: 'google' | 'apple') => {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider,
+    options: {
+      redirectTo: `${window.location.origin}/app/onboarding`,
+    },
+  });
+  
+  if (error) throw error;
+  return data;
+};
+
+// Sign out
+export const signOut = async () => {
+  const { error } = await supabase.auth.signOut();
+  if (error) throw error;
+};
+
+// Phone verification methods
+export const startPhoneVerification = async (phone: string) => {
+  const { data, error } = await supabase.auth.signInWithOtp({
+    phone,
+  });
+  
+  if (error) throw error;
+  return data;
+};
+
+export const verifyPhone = async (phone: string, token: string) => {
+  const { data, error } = await supabase.auth.verifyOtp({
+    phone,
+    token,
+    type: 'sms',
+  });
+  
+  if (error) throw error;
+  return data;
+};
