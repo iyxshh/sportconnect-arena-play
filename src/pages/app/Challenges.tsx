@@ -129,6 +129,10 @@ const Challenges = () => {
     return matchesSearch && matchesSport && matchesDistance;
   });
   
+  const handleTabChange = (value: string) => {
+    // Any additional logic for tab change if needed
+  };
+  
   return (
     <div className="container py-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
@@ -226,7 +230,7 @@ const Challenges = () => {
             <p className="text-muted-foreground mb-6">
               You haven't joined any challenges yet. Find and join challenges to compete!
             </p>
-            <Button variant="outline" onClick={() => document.querySelector('[data-value="nearby"]')?.click()}>
+            <Button variant="outline" onClick={() => document.querySelector('[data-value="nearby"]')?.dispatchEvent(new Event('click', { bubbles: true }))}>
               Browse Challenges
             </Button>
           </div>
