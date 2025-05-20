@@ -1,6 +1,10 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import WhySection from "@/components/sections/WhySection";
+import FAQSection from "@/components/sections/FAQSection";
+import { CTA } from "@/components/ui/call-to-action";
+import { Footer } from "@/components/ui/footer-section";
 
 const Index = () => {
   return (
@@ -61,79 +65,8 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Features Section */}
-        <section id="features" className="bg-muted/50 py-20">
-          <div className="container">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold mb-4">Why SportConnect?</h2>
-              <p className="text-muted-foreground max-w-xl mx-auto">
-                SportConnect makes it easy to find sports partners, compete, and track your progress in your local area.
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="bg-background rounded-xl p-6 shadow-sm">
-                <div className="w-12 h-12 bg-sport-light-purple rounded-full flex items-center justify-center text-xl mb-4">
-                  🏆
-                </div>
-                <h3 className="text-xl font-bold mb-2">Challenge System</h3>
-                <p className="text-muted-foreground">
-                  Create or join sports challenges in your area. Set stakes with optional bid challenges.
-                </p>
-              </div>
-              
-              <div className="bg-background rounded-xl p-6 shadow-sm">
-                <div className="w-12 h-12 bg-sport-light-purple rounded-full flex items-center justify-center text-xl mb-4">
-                  🌎
-                </div>
-                <h3 className="text-xl font-bold mb-2">Location-Based</h3>
-                <p className="text-muted-foreground">
-                  Find sports enthusiasts near you with our geolocation-based matchmaking system.
-                </p>
-              </div>
-              
-              <div className="bg-background rounded-xl p-6 shadow-sm">
-                <div className="w-12 h-12 bg-sport-light-purple rounded-full flex items-center justify-center text-xl mb-4">
-                  📈
-                </div>
-                <h3 className="text-xl font-bold mb-2">Ranking System</h3>
-                <p className="text-muted-foreground">
-                  Climb the district-based leaderboards with our Elo ranking system and earn colored badges.
-                </p>
-              </div>
-              
-              <div className="bg-background rounded-xl p-6 shadow-sm">
-                <div className="w-12 h-12 bg-sport-light-purple rounded-full flex items-center justify-center text-xl mb-4">
-                  💬
-                </div>
-                <h3 className="text-xl font-bold mb-2">In-App Chat</h3>
-                <p className="text-muted-foreground">
-                  Coordinate with opponents using our real-time chat system after joining challenges.
-                </p>
-              </div>
-              
-              <div className="bg-background rounded-xl p-6 shadow-sm">
-                <div className="w-12 h-12 bg-sport-light-purple rounded-full flex items-center justify-center text-xl mb-4">
-                  🏅
-                </div>
-                <h3 className="text-xl font-bold mb-2">Win/Lose Posters</h3>
-                <p className="text-muted-foreground">
-                  Show off your victories with auto-generated graphics on your profile.
-                </p>
-              </div>
-              
-              <div className="bg-background rounded-xl p-6 shadow-sm">
-                <div className="w-12 h-12 bg-sport-light-purple rounded-full flex items-center justify-center text-xl mb-4">
-                  🔔
-                </div>
-                <h3 className="text-xl font-bold mb-2">Match Reminders</h3>
-                <p className="text-muted-foreground">
-                  Never miss a match with our automatic pre-match notifications system.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* Why Section with BentoGrid */}
+        <WhySection />
         
         {/* How It Works Section */}
         <section id="how-it-works" className="py-20">
@@ -208,115 +141,13 @@ const Index = () => {
         </section>
         
         {/* FAQ Section */}
-        <section id="faq" className="bg-muted/50 py-20">
-          <div className="container">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
-              <p className="text-muted-foreground max-w-xl mx-auto">
-                Have questions about SportConnect? Here are answers to the most common questions.
-              </p>
-            </div>
-            
-            <div className="max-w-3xl mx-auto space-y-6">
-              <div className="bg-background rounded-lg p-6">
-                <h3 className="text-lg font-bold mb-2">Is SportConnect available in my area?</h3>
-                <p className="text-muted-foreground">
-                  SportConnect is available globally! The experience is best in areas with more active users, so invite your friends to join and grow your local community.
-                </p>
-              </div>
-              
-              <div className="bg-background rounded-lg p-6">
-                <h3 className="text-lg font-bold mb-2">How do bid challenges work?</h3>
-                <p className="text-muted-foreground">
-                  Bid challenges allow you to add a monetary stake to your matches. Funds are held in escrow until a winner is confirmed, then automatically transferred to the winner.
-                </p>
-              </div>
-              
-              <div className="bg-background rounded-lg p-6">
-                <h3 className="text-lg font-bold mb-2">How does the ranking system work?</h3>
-                <p className="text-muted-foreground">
-                  We use an Elo-based ranking system that awards or deducts points based on match results and opponent ranking. Different colored badges are awarded as you climb the ranks.
-                </p>
-              </div>
-              
-              <div className="bg-background rounded-lg p-6">
-                <h3 className="text-lg font-bold mb-2">Can I use SportConnect for team sports?</h3>
-                <p className="text-muted-foreground">
-                  Yes! While initially focused on individual sports, SportConnect supports team challenges where you can coordinate team formations through the in-app chat.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
+        <FAQSection />
         
         {/* CTA Section */}
-        <section className="py-20">
-          <div className="container">
-            <div className="bg-gradient-to-r from-sport-purple to-sport-dark-purple rounded-2xl p-12 text-white text-center">
-              <h2 className="text-3xl font-bold mb-4">Ready to Connect & Compete?</h2>
-              <p className="text-lg mb-8 max-w-xl mx-auto">
-                Join thousands of sports enthusiasts on SportConnect and start challenging players in your area today.
-              </p>
-              <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-sport-purple">
-                <Link to="/auth">Create Your Account</Link>
-              </Button>
-            </div>
-          </div>
-        </section>
+        <CTA />
       </main>
 
-      <footer className="bg-muted py-12">
-        <div className="container">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="mb-6 md:mb-0">
-              <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sport-purple to-sport-dark-purple">
-                SportConnect
-              </span>
-              <p className="text-muted-foreground mt-2">
-                Connect. Compete. Conquer.
-              </p>
-            </div>
-            
-            <div className="flex gap-8">
-              <div>
-                <h4 className="font-medium mb-2">Product</h4>
-                <ul className="space-y-1">
-                  <li><a href="#features" className="text-muted-foreground hover:text-sport-purple">Features</a></li>
-                  <li><a href="#how-it-works" className="text-muted-foreground hover:text-sport-purple">How it works</a></li>
-                  <li><a href="#" className="text-muted-foreground hover:text-sport-purple">Pricing</a></li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="font-medium mb-2">Support</h4>
-                <ul className="space-y-1">
-                  <li><a href="#faq" className="text-muted-foreground hover:text-sport-purple">FAQs</a></li>
-                  <li><a href="#" className="text-muted-foreground hover:text-sport-purple">Contact</a></li>
-                  <li><a href="#" className="text-muted-foreground hover:text-sport-purple">Privacy</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          
-          <div className="border-t border-muted-foreground/20 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-muted-foreground">
-              © 2025 SportConnect. All rights reserved.
-            </p>
-            
-            <div className="flex gap-4 mt-4 md:mt-0">
-              <a href="#" className="text-muted-foreground hover:text-sport-purple">
-                Terms
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-sport-purple">
-                Privacy
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-sport-purple">
-                Cookies
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
